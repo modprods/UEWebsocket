@@ -32,7 +32,7 @@ I did not use struct, because change a value of a struct in blueprint is not con
 
 ★ 8. HTML5(NEW!!)
 
-this plugin tested on 4.16, 4.17, 4.18, 4.19 .
+this plugin tested on 4.16, 4.17, 4.18, 4.19, 4.20.
 
 # Install
 This is a normal plugin, if you are a beginner and don't know how to install it, 
