@@ -24,4 +24,4 @@ function CreateWebSocketServer(host, port)
 }
 
 
-CreateWebSocketServer("192.168.1.3", 25000)
+CreateWebSocketServer("localhost", 8080)

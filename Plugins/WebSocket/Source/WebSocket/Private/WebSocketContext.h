@@ -30,6 +30,8 @@
 #include "libwebsockets.h"
 #endif
 
+#include <iostream>
+
 #include "WebSocketContext.generated.h"
 
 
@@ -67,5 +69,6 @@ private:
 #elif PLATFORM_HTML5
 #else
 	struct lws_context* mlwsContext;
+	std::string mstrCAPath;
 #endif
 };
