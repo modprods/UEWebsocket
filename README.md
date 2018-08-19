@@ -65,6 +65,7 @@ If you have any problem, please email me:feixuwu@outlook.com.
    ![ScreenShot](docs/jsontoobj.PNG)
 
 ★ ssl support
+
    if you test in demo project, the ssl connect works, but not works in your project, you may need copy the CA direcotry from the Content direcotry in demo project to your own project Content direcotry.
 
 # License
