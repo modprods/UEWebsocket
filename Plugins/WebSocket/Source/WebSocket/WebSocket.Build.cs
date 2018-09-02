@@ -13,14 +13,7 @@ public class WebSocket : ModuleRules
 
     public WebSocket(ReadOnlyTargetRules Target) : base(Target)
     {
-		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				"WebSocket/Public"
-				// ... add public include paths required here ...
-			}
-			);
-				
+						
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
