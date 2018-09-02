@@ -37,6 +37,8 @@ this plugin tested on 4.16, 4.17, 4.18, 4.19, 4.20 with vs2017(vs2015 may build 
 # Install
 This is a normal plugin, if you are a beginner and don't know how to install it, 
 please watch the video on my [another plugin](https://github.com/feixuwu/UnrealEngine4-Admob).
+
+If you need connect wss address, you may need copy the CA folder to your own project content directory.
 If you have any problem, please email me:feixuwu@outlook.com.
 
 # Usage
