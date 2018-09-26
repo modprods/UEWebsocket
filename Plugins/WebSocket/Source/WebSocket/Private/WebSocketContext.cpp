@@ -24,6 +24,9 @@
 #include "WebSocketContext.h"
 #include "UObjectGlobals.h"
 #include "WebSocketBase.h"
+#include "Paths.h"
+#include "FileManager.h"
+#include "FileHelper.h"
 
 #define MAX_PAYLOAD	64*1024
 
