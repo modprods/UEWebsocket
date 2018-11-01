@@ -164,8 +164,9 @@ void UWebSocketContext::CreateCtx()
 	extern FString GExternalFilePath;
 	PEMFilename = GExternalFilePath / TEXT("ca-bundle.pem");
 #endif
-
+#ifndef PLATFORM_WINDOWS
 	if (!FPaths::FileExists(PEMFilename))
+#endif
 	{
 		UE_LOG(LogInit, Log, TEXT(" websocket: not exist PEM file: '%s'"), *PEMFilename);
 		IFileManager* FileManager = &IFileManager::Get();
@@ -185,9 +186,10 @@ void UWebSocketContext::CreateCtx()
 	}
 	UE_LOG(LogInit, Log, TEXT(" websocket: using generated PEM file: '%s'"), *PEMFilename);
 
+	PEMFilename = FPaths::ConvertRelativePathToFull(PEMFilename);
 	mstrCAPath = TCHAR_TO_UTF8(*PEMFilename);
 
-	info.ssl_ca_filepath = mstrCAPath.c_str();
+	info.ssl_ca_filepath = mstrCAPath.c_str();//"D:/GitHub/UEWebsocket/Saved/ca-bundle.pem";// mstrCAPath.c_str();
 
 	mlwsContext = lws_create_context(&info);
 	if (mlwsContext == nullptr)
