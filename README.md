@@ -68,7 +68,11 @@ If you have any problem, please email me:feixuwu@outlook.com.
 
 ★ ssl support
 
-   if you test in demo project, the ssl connect works, but not works in your project, you may need copy the CA direcotry from the Content direcotry in demo project to your own project Content direcotry.
+   if you test in demo project, the ssl connect works, but not works in your project, then follow the next steps:
+   1. copy the CA direcotry from the Content direcotry in demo project to your own project Content direcotry.
+   2. in package setting, please fill the CA directory like this:
+      
+   
 
 # License
 This is an open source project, you can use it free. If you think this project useful, please give me a star to let me know 
