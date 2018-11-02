@@ -27,6 +27,7 @@
 #include "Paths.h"
 #include "FileManager.h"
 #include "FileHelper.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #define MAX_PAYLOAD	64*1024
 
@@ -160,24 +161,28 @@ void UWebSocketContext::CreateCtx()
 	info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
 
 	FString PEMFilename = FPaths::ProjectSavedDir() / TEXT("ca-bundle.pem");
+	PEMFilename = IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(*PEMFilename);
 #if PLATFORM_ANDROID
 	extern FString GExternalFilePath;
 	PEMFilename = GExternalFilePath / TEXT("ca-bundle.pem");
 #endif
-#ifndef PLATFORM_WINDOWS
+
 	if (!FPaths::FileExists(PEMFilename))
-#endif
 	{
 		UE_LOG(LogInit, Log, TEXT(" websocket: not exist PEM file: '%s'"), *PEMFilename);
+		//UKismetSystemLibrary::PrintString(this, TEXT("not exist in save dir") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 		IFileManager* FileManager = &IFileManager::Get();
+		
 		auto Ar = TUniquePtr<FArchive>(FileManager->CreateFileWriter(*PEMFilename, 0));
 		if (Ar)
 		{
+			//UKismetSystemLibrary::PrintString(this, TEXT("ready to save to file:") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 			UE_LOG(LogInit, Log, TEXT(" websocket: generate PEM file: '%s'"), *PEMFilename);
 			FString Contents;
 			FString OverridePEMFilename = FPaths::ProjectContentDir() + TEXT("CA/ca-bundle.pem");
 			if (FFileHelper::LoadFileToString(Contents, *OverridePEMFilename))
 			{
+				//UKismetSystemLibrary::PrintString(this, TEXT("save file to save dir:") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 				const TCHAR* StrPtr = *Contents;
 				auto Src = StringCast<ANSICHAR>(StrPtr, Contents.Len());
 				Ar->Serialize((ANSICHAR*)Src.Get(), Src.Length() * sizeof(ANSICHAR));
@@ -187,9 +192,10 @@ void UWebSocketContext::CreateCtx()
 	UE_LOG(LogInit, Log, TEXT(" websocket: using generated PEM file: '%s'"), *PEMFilename);
 
 	PEMFilename = FPaths::ConvertRelativePathToFull(PEMFilename);
+	//UKismetSystemLibrary::PrintString(this, TEXT("full dir:") + PEMFilename, true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 	mstrCAPath = TCHAR_TO_UTF8(*PEMFilename);
 
-	info.ssl_ca_filepath = mstrCAPath.c_str();//"D:/GitHub/UEWebsocket/Saved/ca-bundle.pem";// mstrCAPath.c_str();
+	info.ssl_ca_filepath = mstrCAPath.c_str();
 
 	mlwsContext = lws_create_context(&info);
 	if (mlwsContext == nullptr)
