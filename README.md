@@ -38,7 +38,7 @@ this plugin tested on 4.16, 4.17, 4.18, 4.19, 4.20 with vs2017(vs2015 may build 
 This is a normal plugin, if you are a beginner and don't know how to install it, 
 please watch the video on my [another plugin](https://github.com/feixuwu/UnrealEngine4-Admob).
 
-If you need connect wss address, you may need copy the CA folder to your own project content directory.
+currently, this plugin automatic create a ca file, so you can use wss.
 If you have any problem, please email me:feixuwu@outlook.com.
 
 # Usage
@@ -68,10 +68,7 @@ If you have any problem, please email me:feixuwu@outlook.com.
 
 ★ ssl support
 
-   if you test in demo project, the ssl connect works, but not works in your project, then follow the next steps:
-   1. copy the CA direcotry from the Content direcotry in demo project to your own project Content direcotry.
-   2. in package setting, please fill the CA directory like this:
-      ![ScreenShot](docs/casetting.PNG)
+   this plugin support wss, it will automatic create ca file, the ca content is an array in WebSocketCA.cpp file.
    
 
 # License
