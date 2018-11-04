@@ -28,6 +28,8 @@
 #include "FileManager.h"
 #include "FileHelper.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Misc/Base64.h"
+#include <fstream>
 
 #define MAX_PAYLOAD	64*1024
 
@@ -141,6 +143,8 @@ UWebSocketContext::UWebSocketContext()
 #endif
 }
 
+extern char g_caArray[];
+
 void UWebSocketContext::CreateCtx()
 {
 #if PLATFORM_UWP
@@ -166,37 +170,27 @@ void UWebSocketContext::CreateCtx()
 	extern FString GExternalFilePath;
 	PEMFilename = GExternalFilePath / TEXT("ca-bundle.pem");
 #endif
-
-	if (!FPaths::FileExists(PEMFilename))
-	{
-		UE_LOG(LogInit, Log, TEXT(" websocket: not exist PEM file: '%s'"), *PEMFilename);
-		//UKismetSystemLibrary::PrintString(this, TEXT("not exist in save dir") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
-		IFileManager* FileManager = &IFileManager::Get();
-		
-		auto Ar = TUniquePtr<FArchive>(FileManager->CreateFileWriter(*PEMFilename, 0));
-		if (Ar)
-		{
-			//UKismetSystemLibrary::PrintString(this, TEXT("ready to save to file:") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
-			UE_LOG(LogInit, Log, TEXT(" websocket: generate PEM file: '%s'"), *PEMFilename);
-			FString Contents;
-			FString OverridePEMFilename = FPaths::ProjectContentDir() + TEXT("CA/ca-bundle.pem");
-			if (FFileHelper::LoadFileToString(Contents, *OverridePEMFilename))
-			{
-				//UKismetSystemLibrary::PrintString(this, TEXT("save file to save dir:") + FPaths::ConvertRelativePathToFull(PEMFilename), true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
-				const TCHAR* StrPtr = *Contents;
-				auto Src = StringCast<ANSICHAR>(StrPtr, Contents.Len());
-				Ar->Serialize((ANSICHAR*)Src.Get(), Src.Length() * sizeof(ANSICHAR));
-			}
-		}
-	}
-	UE_LOG(LogInit, Log, TEXT(" websocket: using generated PEM file: '%s'"), *PEMFilename);
-
-	PEMFilename = FPaths::ConvertRelativePathToFull(PEMFilename);
-	//UKismetSystemLibrary::PrintString(this, TEXT("full dir:") + PEMFilename, true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 	mstrCAPath = TCHAR_TO_UTF8(*PEMFilename);
+	std::ofstream f(mstrCAPath.c_str() );
+	if (f.is_open())
+	{
+		FString strBase64CA(ANSI_TO_TCHAR(g_caArray) );
+		FString strCAContent;
+		FBase64::Decode(strBase64CA, strCAContent);
+		std::string strOriginCA = TCHAR_TO_UTF8(*strCAContent);
+		f.write(strOriginCA.c_str(), strOriginCA.size());
+		f.close();
+	}
+	else
+	{
+		UE_LOG(LogInit, Log, TEXT(" websocket: fail open file: '%s'"), *PEMFilename);
+		UKismetSystemLibrary::PrintString(this, TEXT(" websocket: fail open file:") + PEMFilename, true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
+	}
+	
+	UE_LOG(LogInit, Log, TEXT(" websocket: using generated PEM file: '%s'"), *PEMFilename);
+	//UKismetSystemLibrary::PrintString(this, TEXT("full dir:") + PEMFilename, true, true, FLinearColor(0.0, 0.66, 1.0), 1000);
 
 	info.ssl_ca_filepath = mstrCAPath.c_str();
-
 	mlwsContext = lws_create_context(&info);
 	if (mlwsContext == nullptr)
 	{
