@@ -49,14 +49,6 @@ static bool GetTextFromObject(const TSharedRef<FJsonObject>& Obj, FText& TextOut
 	return false;
 }
 
-FString UWebSocketBlueprintLibrary::StandardizeCase(const FString &StringIn)
-{
-	// this probably won't work for all cases, consider downcaseing the string fully
-	FString FixedString = StringIn;
-	FixedString[0] = FChar::ToLower(FixedString[0]); // our json classes/variable start lower case
-	FixedString.ReplaceInline(TEXT("ID"), TEXT("Id"), ESearchCase::CaseSensitive); // Id is standard instead of ID, some of our fnames use ID
-	return FixedString;
-}
 
 
 UWebSocketBase* UWebSocketBlueprintLibrary::Connect(const FString& url)
@@ -613,7 +605,7 @@ bool UWebSocketBlueprintLibrary::UObjectToJsonAttributes(const UStruct* StructDe
 			continue;
 		}
 
-		FString VariableName = StandardizeCase(Property->GetName());
+		FString VariableName = Property->GetName();
 		const void* Value = Property->ContainerPtrToValuePtr<uint8>(Struct);
 
 		// convert the property to a FJsonValue
