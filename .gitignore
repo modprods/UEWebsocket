@@ -3,6 +3,8 @@ DerivedDataCache
 Intermediate
 Saved
 .vs
+.DS_Store
+**/.DS_Store
 Android_ETC1
 HTML5/**
 Build
