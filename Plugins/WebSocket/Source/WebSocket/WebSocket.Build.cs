@@ -105,9 +105,9 @@ public class WebSocket : ModuleRules
                     PublicAdditionalLibraries.Add(Lib);
                 }
             }
-            else if(EngineMinorVersion == "22")
+            else if(EngineMinorVersion == "22" || EngineMinorVersion == "23")
             {
-                // for 4.22
+                // for 4.22 and 4.23
                 if (Target.Type == TargetType.Editor)
                 {
                     PublicAdditionalLibraries.Add("websockets_static422.lib");
@@ -146,7 +146,7 @@ public class WebSocket : ModuleRules
                     PublicAdditionalLibraries.Add(Lib);
                 }
             }
-            else if(EngineMinorVersion == "22")
+            else if(EngineMinorVersion == "22"|| EngineMinorVersion == "23")
             {
                 string[] StaticLibrariesX32 = new string[] {
                     "websockets_static422.lib",
