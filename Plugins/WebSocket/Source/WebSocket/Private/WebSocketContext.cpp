@@ -70,7 +70,11 @@ static const struct lws_extension exts[] = {
 void UWebSocketContext::BeginDestroy()
 {
 	Super::BeginDestroy();
-	s_websocketCtx.Reset();
+}
+
+UWebSocketContext::~UWebSocketContext()
+{
+	UE_LOG(LogInit, Log, TEXT("release UWebSocketContext"));
 }
 
 #if PLATFORM_UWP

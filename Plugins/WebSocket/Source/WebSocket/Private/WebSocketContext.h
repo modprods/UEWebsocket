@@ -51,6 +51,8 @@ public:
 
 	UWebSocketContext();
 
+	~UWebSocketContext();
+
 	void CreateCtx();
 
 	virtual void BeginDestroy() override;
