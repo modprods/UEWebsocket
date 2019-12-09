@@ -56,54 +56,6 @@ private:
 };
 
 
-#elif PLATFORM_HTML5
-#include "Tickable.h"
-
-extern "C" 
-{
-	int SocketCreate(const char* url);
-	int SocketState(int socketInstance);
-	void SocketSend(int socketInstance, const char* ptr, int length);
-	void SocketRecv(int socketInstance, char* ptr, int length);
-	int SocketRecvLength(int socketInstance);
-	void SocketClose(int socketInstance);
-	int SocketError(int socketInstance, char* ptr, int length);
-}
-
-class UWebSocketBase;
-
-class FHtml5SocketHelper :public FTickableGameObject
-{
-public:
-
-	FHtml5SocketHelper()
-	{
-		mHostWebSocket = nullptr;
-	}
-
-	void Bind(UWebSocketBase* host)
-	{
-		mHostWebSocket = host;
-	}
-
-	void UnBind()
-	{
-		mHostWebSocket = nullptr;
-	}
-
-	~FHtml5SocketHelper()
-	{
-		mHostWebSocket = nullptr;
-	}
-
-	virtual void Tick(float DeltaTime) override;
-	virtual bool IsTickable() const override;
-	virtual TStatId GetStatId() const override;
-
-private:
-
-	UWebSocketBase* mHostWebSocket;
-};
 
 #else
 struct lws_context;
@@ -159,11 +111,6 @@ public:
 	Windows::Networking::Sockets::MessageWebSocket^ messageWebSocket;
 	Windows::Storage::Streams::DataWriter^ messageWriter;
 	FUWPSocketHelper^ uwpSocketHelper;
-#elif PLATFORM_HTML5
-	int mWebSocketRef;
-	bool mConnectSuccess;
-	bool mIsError;
-	FHtml5SocketHelper mHtml5SocketHelper;
 #else
 	struct lws_context* mlwsContext;
 	struct lws* mlws;

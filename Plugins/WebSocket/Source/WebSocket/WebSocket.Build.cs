@@ -160,21 +160,21 @@ public class WebSocket : ModuleRules
                 }
             }
         }
-        else if(Target.Platform == UnrealTargetPlatform.HTML5)
-        {
-            PublicDefinitions.Add("PLATFORM_UWP=0");
-            string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/HTML5/"));
-            PublicLibraryPaths.Add(strStaticPath);
+        // else if(Target.Platform == UnrealTargetPlatform.HTML5)
+        // {
+        //     PublicDefinitions.Add("PLATFORM_UWP=0");
+        //     string strStaticPath = Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/lib/HTML5/"));
+        //     PublicLibraryPaths.Add(strStaticPath);
 
-            string[] StaticLibrariesHTML5 = new string[] {
-                "WebSocket.js",
-            };
+        //     string[] StaticLibrariesHTML5 = new string[] {
+        //         "WebSocket.js",
+        //     };
 
-            foreach (string Lib in StaticLibrariesHTML5)
-            {
-                PublicAdditionalLibraries.Add(strStaticPath + Lib);
-            }
-        }
+        //     foreach (string Lib in StaticLibrariesHTML5)
+        //     {
+        //         PublicAdditionalLibraries.Add(strStaticPath + Lib);
+        //     }
+        // }
         else if(Target.Platform == UnrealTargetPlatform.Mac)
         {
             PublicDefinitions.Add("PLATFORM_UWP=0");

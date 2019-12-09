@@ -36,7 +36,7 @@
 extern TSharedPtr<UWebSocketContext> s_websocketCtx;
 
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
+
 #else
 static struct lws_protocols protocols[] = {
 	/* first protocol must always be HTTP handler */
@@ -70,15 +70,11 @@ static const struct lws_extension exts[] = {
 void UWebSocketContext::BeginDestroy()
 {
 	Super::BeginDestroy();
-}
-
-UWebSocketContext::~UWebSocketContext()
-{
-	UE_LOG(LogInit, Log, TEXT("release UWebSocketContext"));
+	s_websocketCtx.Reset();
 }
 
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
+
 #else
 int UWebSocketContext::callback_echo(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len)
 {
@@ -141,7 +137,6 @@ int UWebSocketContext::callback_echo(struct lws *wsi, enum lws_callback_reasons 
 UWebSocketContext::UWebSocketContext()
 {
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
 #else
 	mlwsContext = nullptr;
 #endif
@@ -152,7 +147,6 @@ extern char g_caArray[];
 void UWebSocketContext::CreateCtx()
 {
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
 #else
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof info);
@@ -206,7 +200,6 @@ void UWebSocketContext::CreateCtx()
 void UWebSocketContext::Tick(float DeltaTime)
 {
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
 #else
 	if (mlwsContext != nullptr)
 	{
@@ -229,7 +222,6 @@ TStatId UWebSocketContext::GetStatId() const
 UWebSocketBase* UWebSocketContext::Connect(const FString& uri, const TMap<FString, FString>& header, bool& connectFail)
 {
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
 #else
 	if (mlwsContext == nullptr)
 	{
@@ -240,7 +232,6 @@ UWebSocketBase* UWebSocketContext::Connect(const FString& uri, const TMap<FStrin
 	UWebSocketBase* pNewSocketBase = NewObject<UWebSocketBase>();
 
 #if PLATFORM_UWP
-#elif PLATFORM_HTML5
 #else
 	pNewSocketBase->mlwsContext = mlwsContext;
 #endif
