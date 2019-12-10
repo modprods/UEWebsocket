@@ -70,7 +70,11 @@ static const struct lws_extension exts[] = {
 void UWebSocketContext::BeginDestroy()
 {
 	Super::BeginDestroy();
-	s_websocketCtx.Reset();
+}
+
+UWebSocketContext::~UWebSocketContext()
+{
+	UE_LOG(LogInit, Log, TEXT("release UWebSocketContext"));
 }
 
 #if PLATFORM_UWP
@@ -137,6 +141,7 @@ int UWebSocketContext::callback_echo(struct lws *wsi, enum lws_callback_reasons 
 UWebSocketContext::UWebSocketContext()
 {
 #if PLATFORM_UWP
+
 #else
 	mlwsContext = nullptr;
 #endif
@@ -147,6 +152,7 @@ extern char g_caArray[];
 void UWebSocketContext::CreateCtx()
 {
 #if PLATFORM_UWP
+
 #else
 	struct lws_context_creation_info info;
 	memset(&info, 0, sizeof info);
@@ -200,6 +206,7 @@ void UWebSocketContext::CreateCtx()
 void UWebSocketContext::Tick(float DeltaTime)
 {
 #if PLATFORM_UWP
+
 #else
 	if (mlwsContext != nullptr)
 	{
@@ -222,6 +229,7 @@ TStatId UWebSocketContext::GetStatId() const
 UWebSocketBase* UWebSocketContext::Connect(const FString& uri, const TMap<FString, FString>& header, bool& connectFail)
 {
 #if PLATFORM_UWP
+
 #else
 	if (mlwsContext == nullptr)
 	{
@@ -232,6 +240,7 @@ UWebSocketBase* UWebSocketContext::Connect(const FString& uri, const TMap<FStrin
 	UWebSocketBase* pNewSocketBase = NewObject<UWebSocketBase>();
 
 #if PLATFORM_UWP
+
 #else
 	pNewSocketBase->mlwsContext = mlwsContext;
 #endif

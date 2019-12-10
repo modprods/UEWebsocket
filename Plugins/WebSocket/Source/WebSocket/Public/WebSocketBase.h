@@ -111,6 +111,7 @@ public:
 	Windows::Networking::Sockets::MessageWebSocket^ messageWebSocket;
 	Windows::Storage::Streams::DataWriter^ messageWriter;
 	FUWPSocketHelper^ uwpSocketHelper;
+
 #else
 	struct lws_context* mlwsContext;
 	struct lws* mlws;

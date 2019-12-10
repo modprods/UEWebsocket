@@ -83,6 +83,7 @@ void FUWPSocketHelper::OnUWPClosed(Windows::Networking::Sockets::IWebSocket^ sen
 	}
 }
 
+
 #endif
 
 
@@ -94,7 +95,7 @@ UWebSocketBase::UWebSocketBase()
 	messageWebSocket = nullptr;
 	uwpSocketHelper = ref new FUWPSocketHelper();
 	uwpSocketHelper->SetParent( (int64)this);
-
+	
 #else
 	mlwsContext = nullptr;
 	mlws = nullptr;
